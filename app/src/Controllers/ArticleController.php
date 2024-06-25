@@ -9,20 +9,23 @@ class ArticleController
     public function index()
     {
         $articles = (new Article())->all();
-        return view('article.index', compact('articles'));
+
+        $table = Article::getTable();
+        return view('article.index', compact('articles', 'table'));
     }
 
     public function edit()
     {
-        $content = 'edit';
-        return view('layouts.app', compact('content'));
+        $id = request('id');
+        $article = (new Article())->find($id);
+        return view('article.edit', compact('article'));
     }
 
     public function store()
     {
         $data = [
             'title' => request('title'),
-            'image' => request('image_url'),
+            'image_url' => request('image_url'),
             'body' => request('contents'),
         ];
 
@@ -32,8 +35,15 @@ class ArticleController
 
     public function update()
     {
-        $content = 'update';
-        return view('layouts.app', compact('content'));
+        $data = [
+            'id' => request('id'),
+            'title' => request('title'),
+            'image_url' => request('image_url'),
+            'body' => request('contents'),
+        ];
+
+        (new Article)->update($data);
+        return redirect('/article');
     }
 
     public function delete()

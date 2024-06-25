@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Controllers\ArticleController;
+use App\Controllers\ImageController;
 use App\Controllers\LandingController;
 
 class Request
@@ -23,15 +24,23 @@ class Request
             'get' => [
                 '/' => [LandingController::class, 'landing'],
                 'article' => [ArticleController::class, 'index'],
+                'article/edit' => [ArticleController::class, 'edit'],
+                'image' => [ImageController::class, 'index'],
             ],
             'post' => [
                 'article' => [ArticleController::class, 'store'],
                 'article/store' => [ArticleController::class, 'store'],
+                'article/update' => [ArticleController::class, 'update'],
                 'article/delete' => [ArticleController::class, 'delete'],
+                'image/store' => [ImageController::class, 'store'],
             ],
         ];
 
-        $requestUri = ltrim($_SERVER['REQUEST_URI'], '/');
+        $arr = explode('?', ltrim($_SERVER['REQUEST_URI'], '/'));
+        
+        $requestUri = $arr[0];
+        $params = !empty($arr[1]) ? $arr[1] : null;
+
         
         if (strlen($requestUri) === 0) {
             $requestUri = '/';
@@ -42,7 +51,7 @@ class Request
             
             $controller->{$routes[$this->method()][$requestUri][1]}();
         } else {
-            view('layouts.404');
+            view('layouts.404', compact('requestUri', 'params'));
         }
     }
 

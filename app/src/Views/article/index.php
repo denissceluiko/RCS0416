@@ -1,4 +1,4 @@
-<h3>MySQL create</h3>
+    <h3><?= $table ?> create</h3>
     <form action="article/store" method="post">
         <input type="hidden" name="type" value="createArticle">
         <input type="text" name="title">
@@ -18,7 +18,7 @@
             <td><?= $article['title']?></td>
             <td><?= $article['image_url']?></td>
             <td><?= $article['body']?></td>
-            <td><a href="?edit=<?= $article['id']?>"><button>Edit</button></a></td>
+            <td><a href="article/edit?id=<?= $article['id']?>"><button>Edit</button></a></td>
             <td>
                 <form action="/article/delete" method="post">
                     <input type="hidden" name="type" value="deleteArticle">
